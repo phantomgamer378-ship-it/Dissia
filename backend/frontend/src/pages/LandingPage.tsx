@@ -96,7 +96,7 @@ export function LandingPage() {
             </div>
             {configQuery.data?.gemini_processing_enabled && (
               <div className="form-group full-width">
-                <label className="checkbox-label"><input type="checkbox" checked={aiConsent} onChange={(event) => setAiConsent(event.target.checked)} /> Allow an AI service to prepare an unverified summary for coordinator review.</label>
+                <label className="checkbox-label" htmlFor="ai-consent"><input id="ai-consent" type="checkbox" aria-label="Allow AI service to prepare an unverified summary for coordinator review" checked={aiConsent} onChange={(event) => setAiConsent(event.target.checked)} /> Allow an AI service to prepare an unverified summary for coordinator review.</label>
               </div>
             )}
             <div className="form-actions full-width">

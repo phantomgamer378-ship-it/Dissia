@@ -1,5 +1,4 @@
-"""Operational incident lifecycle, report association, and task proposal routes."""
-
+from typing import Any
 import uuid
 
 from fastapi import APIRouter, HTTPException
@@ -13,7 +12,7 @@ router = APIRouter(prefix="/api/v1/incidents", tags=["incidents"])
 
 
 @router.get("")
-def list_incidents(actor: Actor):
+def list_incidents(actor: Actor) -> dict[str, list[dict[str, Any]]]:
     """List operational incidents and report-association counts."""
     with db.session() as conn:
         rows = conn.execute(
@@ -25,7 +24,7 @@ def list_incidents(actor: Actor):
 
 
 @router.get("/{incident_id}")
-def get_incident(incident_id: str, actor: Actor):
+def get_incident(incident_id: str, actor: Actor) -> dict[str, Any]:
     """Return single incident with associated reports and tasks."""
     with db.session() as conn:
         incident = conn.execute("SELECT * FROM incidents WHERE id=?", (incident_id,)).fetchone()
@@ -43,7 +42,7 @@ def get_incident(incident_id: str, actor: Actor):
 
 
 @router.post("", status_code=201)
-def create_incident(payload: IncidentCreate, actor: Coordinator):
+def create_incident(payload: IncidentCreate, actor: Coordinator) -> dict[str, str]:
     """Create an incident and optionally associate its source report atomically."""
     incident_id, now = str(uuid.uuid4()), utc_now()
     try:
@@ -66,7 +65,7 @@ def create_incident(payload: IncidentCreate, actor: Coordinator):
 
 
 @router.patch("/{incident_id}")
-def update_incident(incident_id: str, payload: IncidentUpdate, actor: Coordinator):
+def update_incident(incident_id: str, payload: IncidentUpdate, actor: Coordinator) -> dict[str, Any]:
     """Update operational incident status or attributes."""
     with db.session() as conn:
         row = conn.execute("SELECT * FROM incidents WHERE id=?", (incident_id,)).fetchone()
@@ -95,7 +94,7 @@ def update_incident(incident_id: str, payload: IncidentUpdate, actor: Coordinato
 
 
 @router.post("/{incident_id}/review")
-def review_incident(incident_id: str, actor: Coordinator):
+def review_incident(incident_id: str, actor: Coordinator) -> dict[str, Any]:
     """Confirm human coordinator verification of an operational incident."""
     with db.session() as conn:
         row = conn.execute("SELECT * FROM incidents WHERE id=?", (incident_id,)).fetchone()
@@ -106,7 +105,7 @@ def review_incident(incident_id: str, actor: Coordinator):
 
 
 @router.get("/{incident_id}/matches")
-def incident_matches(incident_id: str, actor: Actor):
+def incident_matches(incident_id: str, actor: Actor) -> dict[str, Any]:
     """List explainable candidate reports that could be associated with this incident."""
     with db.session() as conn:
         incident = conn.execute("SELECT id,title,summary,location,status FROM incidents WHERE id=?", (incident_id,)).fetchone()
@@ -134,7 +133,7 @@ def incident_matches(incident_id: str, actor: Actor):
 
 
 @router.post("/{incident_id}/associations")
-def decide_association(incident_id: str, payload: ReportAssociation, actor: Coordinator):
+def decide_association(incident_id: str, payload: ReportAssociation, actor: Coordinator) -> dict[str, str]:
     """Confirm or reject a reviewed report-to-incident relationship."""
     now = utc_now()
     with db.session() as conn:
@@ -156,7 +155,7 @@ def decide_association(incident_id: str, payload: ReportAssociation, actor: Coor
 
 
 @router.post("/{incident_id}/tasks", status_code=201)
-def create_task(incident_id: str, payload: TaskCreate, actor: Coordinator):
+def create_task(incident_id: str, payload: TaskCreate, actor: Coordinator) -> dict[str, Any]:
     """Propose a response task for an existing incident."""
     task_id, now = str(uuid.uuid4()), utc_now()
     with db.session() as conn:

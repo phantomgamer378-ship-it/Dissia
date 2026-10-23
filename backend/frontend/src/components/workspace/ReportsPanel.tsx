@@ -38,7 +38,7 @@ export function ReportsPanel({ reports, token, role, onChanged, onCreateIncident
             <option value="">All Statuses</option><option value="QUEUED">Queued</option><option value="READY_FOR_REVIEW">Ready for Review</option><option value="QUARANTINED">Quarantined</option>
           </select>
           <label className="visually-hidden" htmlFor="reports-search">Search reports</label>
-          <input id="reports-search" type="search" className="search-input-sm" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search report text, location, or ID..." />
+          <input id="reports-search" type="search" aria-label="Search reports" className="search-input-sm" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search report text, location, or ID..." />
         </div>
         <div className="toolbar-actions"><button className="button button-quiet button-sm" type="button" onClick={onChanged}>↻ Refresh</button></div>
       </div>

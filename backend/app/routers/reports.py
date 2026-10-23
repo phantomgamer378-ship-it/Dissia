@@ -1,5 +1,4 @@
-"""Emergency report intake, receipts, extractions, and candidate matching routes."""
-
+from typing import Any
 import json
 import uuid
 
@@ -14,7 +13,9 @@ router = APIRouter(prefix="/api/v1/reports", tags=["reports"])
 
 
 @router.post("", status_code=201)
-def submit_report(payload: ReportSubmission, idempotency_key: str | None = Header(default=None, alias="Idempotency-Key")):
+def submit_report(
+    payload: ReportSubmission, idempotency_key: str | None = Header(default=None, alias="Idempotency-Key")
+) -> dict[str, str]:
     """Persist a public report and its durable processing job atomically."""
     now = utc_now()
     report_id = str(uuid.uuid4())
@@ -39,7 +40,7 @@ def submit_report(payload: ReportSubmission, idempotency_key: str | None = Heade
 
 
 @router.get("/{report_id}/receipt")
-def receipt(report_id: str):
+def receipt(report_id: str) -> dict[str, Any]:
     """Return non-sensitive processing acknowledgement for a report receipt."""
     with db.session() as conn:
         row = conn.execute("SELECT id,status,received_at FROM reports WHERE id=?", (report_id,)).fetchone()
@@ -49,7 +50,9 @@ def receipt(report_id: str):
 
 
 @router.get("")
-def list_reports(actor: Actor, status: str | None = None, limit: int = Query(50, ge=1, le=100), offset: int = Query(0, ge=0)):
+def list_reports(
+    actor: Actor, status: str | None = None, limit: int = Query(50, ge=1, le=100), offset: int = Query(0, ge=0)
+) -> dict[str, Any]:
     """List reports with bounded pagination for authenticated operators."""
     query = (
         "SELECT id,description,location,received_at,status,urgency,reviewed,extraction_json,processing_metadata_json,"
@@ -70,7 +73,7 @@ def list_reports(actor: Actor, status: str | None = None, limit: int = Query(50,
 
 
 @router.get("/{report_id}")
-def get_report(report_id: str, actor: Actor):
+def get_report(report_id: str, actor: Actor) -> dict[str, Any]:
     """Return single report details with extraction proposals."""
     query = (
         "SELECT id,description,location,received_at,status,urgency,reviewed,extraction_json,processing_metadata_json,"
@@ -88,7 +91,7 @@ def get_report(report_id: str, actor: Actor):
 
 
 @router.post("/{report_id}/retry")
-def retry_report(report_id: str, actor: Coordinator):
+def retry_report(report_id: str, actor: Coordinator) -> dict[str, str]:
     """Requeue a report processing job for retry."""
     with db.session() as conn:
         report = conn.execute("SELECT id FROM reports WHERE id=?", (report_id,)).fetchone()
@@ -106,7 +109,7 @@ def retry_report(report_id: str, actor: Coordinator):
 
 
 @router.get("/{report_id}/extractions")
-def list_extractions(report_id: str, actor: Actor):
+def list_extractions(report_id: str, actor: Actor) -> dict[str, list[dict[str, Any]]]:
     """Return versioned extraction proposals and provider validation metadata."""
     with db.session() as conn:
         if not conn.execute("SELECT 1 FROM reports WHERE id=?", (report_id,)).fetchone():
@@ -125,7 +128,7 @@ def list_extractions(report_id: str, actor: Actor):
 
 
 @router.post("/{report_id}/review")
-def review_report(report_id: str, actor: Coordinator):
+def review_report(report_id: str, actor: Coordinator) -> dict[str, Any]:
     """Mark a report reviewed while retaining its original submitted text."""
     with db.session() as conn:
         result = conn.execute("UPDATE reports SET reviewed=TRUE WHERE id=?", (report_id,))
@@ -136,7 +139,7 @@ def review_report(report_id: str, actor: Coordinator):
 
 
 @router.get("/{report_id}/matches")
-def report_matches(report_id: str, actor: Actor):
+def report_matches(report_id: str, actor: Actor) -> dict[str, Any]:
     """List explainable incident candidates for coordinator review."""
     with db.session() as conn:
         report = conn.execute("SELECT id,description,location FROM reports WHERE id=?", (report_id,)).fetchone()

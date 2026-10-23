@@ -1,4 +1,4 @@
-"""Response task coordination, inspection, and state machine transition routes."""
+from typing import Any
 
 from fastapi import APIRouter, HTTPException
 
@@ -11,7 +11,7 @@ router = APIRouter(prefix="/api/v1/tasks", tags=["tasks"])
 
 
 @router.get("")
-def list_tasks(actor: Actor):
+def list_tasks(actor: Actor) -> dict[str, list[dict[str, Any]]]:
     """List response tasks with associated incident titles."""
     with db.session() as conn:
         rows = conn.execute(
@@ -21,7 +21,7 @@ def list_tasks(actor: Actor):
 
 
 @router.get("/{task_id}")
-def get_task(task_id: str, actor: Actor):
+def get_task(task_id: str, actor: Actor) -> dict[str, Any]:
     """Return single task with incident title."""
     with db.session() as conn:
         row = conn.execute(
@@ -34,7 +34,7 @@ def get_task(task_id: str, actor: Actor):
 
 
 @router.patch("/{task_id}")
-def transition_task(task_id: str, payload: TaskTransition, actor: Actor):
+def transition_task(task_id: str, payload: TaskTransition, actor: Actor) -> dict[str, Any]:
     """Apply a permitted task transition with optimistic version checking."""
     with db.session() as conn:
         row = conn.execute("SELECT * FROM tasks WHERE id=?", (task_id,)).fetchone()

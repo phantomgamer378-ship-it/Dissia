@@ -1,5 +1,4 @@
-"""Authentication identity, user roster, and role management routes."""
-
+from typing import Any
 import os
 import secrets
 import uuid
@@ -15,7 +14,7 @@ router = APIRouter(prefix="/api/v1", tags=["auth"])
 
 
 @router.get("/auth/me")
-def auth_me(authorization: str | None = Header(default=None)):
+def auth_me(authorization: str | None = Header(default=None)) -> dict[str, str]:
     """Return the authenticated user's server-assigned role, including pending users."""
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Supabase sign-in required")
@@ -31,7 +30,7 @@ def auth_me(authorization: str | None = Header(default=None)):
 
 
 @router.get("/users")
-def list_users(actor: Coordinator):
+def list_users(actor: Coordinator) -> dict[str, list[dict[str, Any]]]:
     """List registered users and their server-assigned access roles."""
     with db.session() as conn:
         rows = conn.execute("SELECT user_id,email,role,created_at FROM user_roles ORDER BY created_at").fetchall()
@@ -39,7 +38,7 @@ def list_users(actor: Coordinator):
 
 
 @router.patch("/users/{user_id}/role")
-def update_user_role(user_id: str, payload: UserRoleUpdate, actor: Coordinator):
+def update_user_role(user_id: str, payload: UserRoleUpdate, actor: Coordinator) -> dict[str, str]:
     """Approve, change, or suspend an account's application role."""
     try:
         normalized_id = str(uuid.UUID(user_id))

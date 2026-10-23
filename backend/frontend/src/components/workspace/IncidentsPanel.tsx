@@ -16,7 +16,7 @@ export function IncidentsPanel({ incidents, role, onRefresh, onCreate, onPropose
   return (
     <>
       <div className="panel-toolbar">
-        <div className="filter-group"><label className="visually-hidden" htmlFor="incidents-search">Search incidents</label><input id="incidents-search" type="search" className="search-input-sm" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search incidents by title, summary, location..." /></div>
+        <div className="filter-group"><label className="visually-hidden" htmlFor="incidents-search">Search incidents</label><input id="incidents-search" type="search" aria-label="Search incidents" className="search-input-sm" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search incidents by title, summary, location..." /></div>
         <div className="toolbar-actions">
           <button className="button button-quiet button-sm" type="button" onClick={onRefresh}>↻ Refresh</button>
           {role === "coordinator" && <button className="button button-primary button-sm" type="button" onClick={onCreate}>+ New Incident</button>}
