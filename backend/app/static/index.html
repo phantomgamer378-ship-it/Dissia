@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SANKET AI frontend entry</title>
+  </head>
+  <body>
+    <main>
+      <h1>SANKET AI uses a built React frontend</h1>
+      <p>Run the app at <a href="http://127.0.0.1:8088/">http://127.0.0.1:8088/</a>.</p>
+    </main>
+    <script>
+      if (window.location.protocol === "file:") {
+        window.location.replace("http://127.0.0.1:8088/");
+      } else {
+        window.location.replace("/static/dist/index.html");
+      }
+    </script>
+  </body>
+</html>

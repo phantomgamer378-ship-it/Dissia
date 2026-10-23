@@ -1,0 +1,86 @@
+name: sanket_ai
+description: SANKET AI – AI-assisted emergency information processing and incident coordination.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.11.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+
+  # Navigation
+  go_router: ^14.6.2
+
+  # Networking
+  dio: ^5.7.0
+
+  # Supabase
+  supabase_flutter: ^2.8.4
+
+  # Local database (offline drafts)
+  drift: ^2.20.3
+  sqlite3_flutter_libs: ^0.5.29
+  path_provider: ^2.1.5
+  path: ^1.9.1
+
+  # Secure storage
+  flutter_secure_storage: ^9.2.4
+
+  # Media / Evidence
+  image_picker: ^1.1.2
+  file_picker: ^8.1.7
+  cached_network_image: ^3.4.1
+
+  # Location
+  geolocator: ^13.0.2
+
+  # Permissions
+  permission_handler: ^11.3.1
+
+  # Connectivity
+  connectivity_plus: ^6.1.4
+
+  # UI extras
+  flutter_animate: ^4.5.0
+  timeago: ^3.7.0
+  intl: ^0.20.2
+  google_fonts: ^6.2.1
+  flutter_svg: ^2.0.15
+  shimmer: ^3.0.0
+
+  # Utils
+  uuid: ^4.5.1
+  collection: ^1.19.1
+  equatable: ^2.0.7
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
+  logger: ^2.5.0
+  package_info_plus: ^8.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  build_runner: ^2.4.13
+  riverpod_generator: ^2.6.2
+  freezed: ^2.5.7
+  json_serializable: ^6.9.2
+  drift_dev: ^2.20.2
+  mocktail: ^1.0.4
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/animations/

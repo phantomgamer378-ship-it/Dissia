@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=65", "wheel==0.45.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sanket-ai"
+version = "0.1.0"
+description = "Reviewable emergency report coordination prototype"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi==0.159.1",
+    "starlette==1.9.0",
+    "pydantic==2.14.1",
+    "uvicorn==0.27.0",
+    "google-genai==2.32.0",
+    "psycopg[binary]==3.3.6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==9.1.1", "httpx2==2.14.0", "ruff==0.14.2"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.setuptools.package-data]
+app = ["static/favicon.svg", "static/dist/index.html", "static/dist/assets/*", "static/vendor/*.txt"]

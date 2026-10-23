@@ -1,0 +1,25 @@
+x-sanket-environment: &sanket-environment
+  SUPABASE_URL: ${SUPABASE_URL:?Set SUPABASE_URL in .env}
+  SUPABASE_PUBLISHABLE_KEY: ${SUPABASE_PUBLISHABLE_KEY:?Set SUPABASE_PUBLISHABLE_KEY in .env}
+  SUPABASE_DATABASE_URL: ${SUPABASE_DATABASE_URL:?Set SUPABASE_DATABASE_URL in .env}
+  SANKET_BOOTSTRAP_COORDINATOR_EMAIL: ${SANKET_BOOTSTRAP_COORDINATOR_EMAIL:-}
+  GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+  GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.8-flash}
+  ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:8000}
+
+services:
+  web:
+    build: .
+    ports:
+      - "${SANKET_PORT:-8088}:8000"
+    environment: *sanket-environment
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/readyz', timeout=2)"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+  worker:
+    build: .
+    command: ["python", "-m", "app.worker"]
+    environment: *sanket-environment
+    restart: unless-stopped

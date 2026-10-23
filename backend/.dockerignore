@@ -1,0 +1,10 @@
+.env
+.venv
+node_modules
+app/static/dist
+supabase/.temp
+__pycache__
+.pytest_cache
+dist
+tests
+*.db
