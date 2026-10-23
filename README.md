@@ -6,6 +6,14 @@
 [![Backend Linting](https://img.shields.io/badge/ruff%20check-passed-blue.svg)](backend/)
 [![Sutra Evaluation](https://img.shields.io/badge/sutra%20compliance-100%2F100-success.svg)](docs/SUTRA_EVALUATION.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Render Live](https://img.shields.io/badge/Render-Live%20Backend-success.svg)](https://dissia-backend.onrender.com)
+[![Web Portal](https://img.shields.io/badge/Web%20Portal-Live%20UI-blue.svg)](https://dissia-backend.onrender.com/)
+[![Health Check](https://img.shields.io/badge/Health%20Check-200%20OK-brightgreen.svg)](https://dissia-backend.onrender.com/healthz)
+
+> 🚀 **Live Production Deployment**: [https://dissia-backend.onrender.com](https://dissia-backend.onrender.com)  
+> 📖 **Interactive Swagger Docs**: [https://dissia-backend.onrender.com/docs](https://dissia-backend.onrender.com/docs)  
+> 🩺 **Liveness Probe**: [https://dissia-backend.onrender.com/healthz](https://dissia-backend.onrender.com/healthz)  
+> 🗄️ **Readiness & DB Probe**: [https://dissia-backend.onrender.com/readyz](https://dissia-backend.onrender.com/readyz)
 
 ---
 
