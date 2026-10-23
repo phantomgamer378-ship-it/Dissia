@@ -8,10 +8,10 @@ const projectRoot = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig(({ command }) => ({
   root: resolve(projectRoot, "frontend"),
-  base: command === "serve" ? "/" : "/static/dist/",
+  base: process.env.VITE_BASE || (command === "serve" ? "/" : "/static/dist/"),
   plugins: [react(), tailwindcss()],
   build: {
-    outDir: resolve(projectRoot, "app/static/dist"),
+    outDir: resolve(projectRoot, process.env.VITE_OUT_DIR || "app/static/dist"),
     emptyOutDir: true,
     sourcemap: false,
   },

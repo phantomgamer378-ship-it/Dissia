@@ -5,6 +5,9 @@ export class ApiError extends Error {
   }
 }
 
+export const API_BASE_URL: string =
+  (import.meta as unknown as { env?: { VITE_API_BASE_URL?: string } }).env?.VITE_API_BASE_URL || "";
+
 /** Fetch a JSON endpoint and surface the server's safe error detail. */
 export async function api<T>(
   path: string,
@@ -16,7 +19,10 @@ export async function api<T>(
     headers.set("Content-Type", "application/json");
   }
   if (token) headers.set("Authorization", "Bearer " + token);
-  const response = await fetch(path, { ...init, headers });
+  const targetUrl = path.startsWith("http://") || path.startsWith("https://")
+    ? path
+    : `${API_BASE_URL}${path.startsWith("/") ? path : `/${path}`}`;
+  const response = await fetch(targetUrl, { ...init, headers });
   const body: unknown = await response.json().catch(() => null);
   if (!response.ok) {
     const detail =
